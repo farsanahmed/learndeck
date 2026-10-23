@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Gradle wrapper script - generated for LearnDeck
-# Uses Gradle 8.5, compatible with AGP 8.5 and Kotlin 2.0
+# Uses Gradle 8.7, compatible with AGP 8.5 and Kotlin 2.0
 #
 # Copyright (c) The Gradle contributors.
 #
@@ -42,7 +42,7 @@ if [ -z "${GRADLE_USER_HOME}" ]; then
 fi
 
 # Set the distribution URL.
-GRADLE_DISTRIBUTION_URL="https://services.gradle.org/distributions/gradle-8.5-bin.zip"
+GRADLE_DISTRIBUTION_URL="https://services.gradle.org/distributions/gradle-8.7-all.zip"
 
 # Set the distribution SHA256 checksum.
 GRADLE_DISTRIBUTION_SHA256="59559da237460f5c8d648a4f4e0f6f4e0a6b8c8d6e8f4a6b8c8d6e8f4a6b8c8d"
@@ -51,10 +51,10 @@ GRADLE_DISTRIBUTION_SHA256="59559da237460f5c8d648a4f4e0f6f4e0a6b8c8d6e8f4a6b8c8d
 GRADLE_DISTRIBUTION_DIR="$GRADLE_USER_HOME/wrapper/dists"
 
 # Set the distribution file name.
-GRADLE_DISTRIBUTION_FILE="gradle-8.5-bin.zip"
+GRADLE_DISTRIBUTION_FILE="gradle-8.7-all.zip"
 
 # Set the distribution directory name.
-GRADLE_DISTRIBUTION_DIR_NAME="gradle-8.5"
+GRADLE_DISTRIBUTION_DIR_NAME="gradle-8.7"
 
 # Set the distribution hash.
 GRADLE_DISTRIBUTION_HASH="59559da237460f5c8d648a4f4e0f6f4e0a6b8c8d6e8f4a6b8c8d6e8f4a6b8c8d"
@@ -72,7 +72,7 @@ GRADLE_DISTRIBUTION_ZIP_PATH="$GRADLE_DISTRIBUTION_PATH/$GRADLE_DISTRIBUTION_FIL
 GRADLE_DISTRIBUTION_UNZIP_DIR="$GRADLE_DISTRIBUTION_PATH"
 
 # Set the distribution executable path.
-GRADLE_EXECUTABLE="$GRADLE_DISTRIBUTION_PATH/gradle-8.5/bin/gradle"
+GRADLE_EXECUTABLE="$GRADLE_DISTRIBUTION_PATH/gradle-8.7/bin/gradle"
 
 # If the distribution directory does not exist, download it.
 if [ ! -d "$GRADLE_DISTRIBUTION_PATH" ]; then
