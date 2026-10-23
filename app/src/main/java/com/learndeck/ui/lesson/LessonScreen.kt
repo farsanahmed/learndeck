@@ -47,7 +47,9 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.ext.tables.TablePlugin
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun LessonScreen(
@@ -91,20 +93,16 @@ fun LessonScreen(
         ) {
             MarkdownRenderer(
                 markdown = lesson.body,
-                markwon = markwon,
                 onCodeBlockClick = { code ->
                     copyToClipboard(context, code)
                     copied = true
-                    androidx.compose.ui.platform.findViewTreeLifecycleOwner(context)?.lifecycle?.scope?.launch {
-                        try {
-                            kotlinx.coroutines.delay(1500)
+                    LaunchedEffect(copied) {
+                        if (copied) {
+                            delay(1500)
                             copied = false
-                        } catch (e: Exception) {
-                            // ignore
                         }
                     }
-                },
-                copied = copied
+                }
             )
         }
     }
@@ -113,12 +111,8 @@ fun LessonScreen(
 @Composable
 private fun MarkdownRenderer(
     markdown: String,
-    markwon: Markwon,
-    onCodeBlockClick: (String) -> Unit,
-    copied: Boolean
+    onCodeBlockClick: (String) -> Unit
 ) {
-    // Use a simple approach: parse markdown and render with Compose
-    // For code blocks, we'll use a custom renderer
     val blocks = parseMarkdown(markdown)
 
     Column(
@@ -151,8 +145,7 @@ private fun MarkdownRenderer(
                     CodeBlockView(
                         code = block.content,
                         language = block.language,
-                        onCopyClick = { onCodeBlockClick(block.content) },
-                        copied = copied
+                        onCopyClick = { onCodeBlockClick(block.content) }
                     )
                 }
                 is MarkdownBlock.ListItem -> {
@@ -170,10 +163,8 @@ private fun MarkdownRenderer(
 private fun CodeBlockView(
     code: String,
     language: String?,
-    onCopyClick: () -> Unit,
-    copied: Boolean
+    onCopyClick: () -> Unit
 ) {
-    val context = LocalContext.current
     val isDark = androidx.compose.material3.MaterialTheme.colorScheme.isDark
     val backgroundColor = if (isDark) Color(0xFF1E1E1E) else Color(0xFFF5F5F5)
     val textColor = if (isDark) Color(0xFFD4D4D4) else Color(0xFF1A1A1A)
@@ -189,7 +180,6 @@ private fun CodeBlockView(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
-            // Header with language and copy button
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -198,7 +188,7 @@ private fun CodeBlockView(
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     language?.let {
@@ -213,14 +203,12 @@ private fun CodeBlockView(
                         Icon(
                             Icons.Default.ContentCopy,
                             contentDescription = "Copy code",
-                            tint = if (copied) androidx.compose.material3.MaterialTheme.colorScheme.primary
-                            else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
             }
-            // Code content
-            androidx.compose.foundation.layout.Box(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(12.dp, 0.dp, 12.dp, 12.dp)
@@ -248,11 +236,9 @@ private fun copyToClipboard(context: Context, text: String) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText("code", text)
     clipboard.primaryClip = clip
-    // Show toast
     android.widget.Toast.makeText(context, "Copied!", android.widget.Toast.LENGTH_SHORT).show()
 }
 
-// Simple markdown parser for basic elements
 sealed interface MarkdownBlock {
     data class Text(val content: String) : MarkdownBlock
     data class Heading(val level: Int, val content: String) : MarkdownBlock
@@ -271,7 +257,6 @@ private fun parseMarkdown(markdown: String): List<MarkdownBlock> {
     while (i < lines.size) {
         val line = lines[i]
 
-        // Code block detection
         if (line.startsWith("```")) {
             if (!inCodeBlock) {
                 inCodeBlock = true
@@ -292,7 +277,6 @@ private fun parseMarkdown(markdown: String): List<MarkdownBlock> {
         } else if (line.startsWith("- ") || line.startsWith("* ")) {
             blocks.add(MarkdownBlock.ListItem(line.substring(2).trim()))
         } else if (line.trim().isNotBlank()) {
-            // Merge consecutive text lines
             var textContent = line
             var j = i + 1
             while (j < lines.size) {
