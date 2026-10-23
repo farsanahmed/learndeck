@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +19,6 @@ import com.learndeck.ui.home.HomeScreen
 import com.learndeck.ui.lesson.LessonScreen
 import com.learndeck.ui.theme.LearnDeckTheme
 import com.learndeck.ui.track.TrackScreen
-import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 

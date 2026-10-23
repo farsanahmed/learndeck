@@ -32,7 +32,6 @@ private val DarkColorScheme = darkColorScheme(
     onSurfaceVariant = Color(0xFFCAC4CF),
     outline = Color(0xFF938F99),
     outlineVariant = Color(0xFF49454F),
-    shadow = Color(0xFF000000),
     scrim = Color(0xFF000000),
     inverseSurface = Color(0xFFE6E1E5),
     inverseOnSurface = Color(0xFF313033),
@@ -65,7 +64,6 @@ private val LightColorScheme = lightColorScheme(
     onSurfaceVariant = Color(0xFF49454F),
     outline = Color(0xFF7A757F),
     outlineVariant = Color(0xFFCAC4CF),
-    shadow = Color(0xFF000000),
     scrim = Color(0xFF000000),
     inverseSurface = Color(0xFF313033),
     inverseOnSurface = Color(0xFFF4EFF4),
@@ -75,7 +73,7 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun LearnDeckTheme(
-    darkTheme: Boolean = MaterialTheme.colorScheme.isDark,
+    darkTheme: Boolean,
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
