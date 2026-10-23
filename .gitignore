@@ -1,3 +1,7 @@
+# Harness logs
+.harness/logs/
+*.zip
+
 # Gradle
 .gradle/
 build/

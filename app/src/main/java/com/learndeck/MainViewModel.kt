@@ -11,24 +11,30 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: LessonRepository) : ViewModel() {
 
-    private val _lessons = MutableStateFlow<List<Lesson>>(emptyList())
-    val lessons = _lessons.asStateFlow()
+    private val _lessonsByTrack = MutableStateFlow<Map<String, List<Lesson>>>(emptyMap())
+    val lessonsByTrack = _lessonsByTrack.asStateFlow()
 
-    fun getLessonsForTrack(track: Track): List<Lesson> {
-        // Load synchronously for now - in a real app we'd use a coroutine
-        return try {
-            repository.getLessonsForTrack(track).also { _lessons.value = it }
-        } catch (e: Exception) {
-            emptyList()
+    fun loadLessons(track: Track) {
+        viewModelScope.launch {
+            try {
+                val lessons = repository.getLessonsForTrack(track)
+                _lessonsByTrack.value = _lessonsByTrack.value.toMutableMap().apply {
+                    put(track.id, lessons)
+                }
+            } catch (e: Exception) {
+                _lessonsByTrack.value = _lessonsByTrack.value.toMutableMap().apply {
+                    put(track.id, emptyList())
+                }
+            }
         }
     }
 
-    fun getLesson(track: Track, lessonId: String): Lesson? {
-        return try {
-            repository.getLesson(track, lessonId)
-        } catch (e: Exception) {
-            null
-        }
+    fun getLessonsForTrack(track: Track): List<Lesson> {
+        return _lessonsByTrack.value[track.id] ?: emptyList()
+    }
+
+    suspend fun getLesson(track: Track, lessonId: String): Lesson? {
+        return repository.getLesson(track, lessonId)
     }
 
     companion object {
