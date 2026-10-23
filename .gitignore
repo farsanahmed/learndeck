@@ -1,0 +1,98 @@
+# Gradle
+.gradle/
+build/
+*/build/
+*/build/
+!*/src/main/**/build/
+
+# Local configuration
+local.properties
+*.iml
+
+# IDE
+.idea/
+*.iws
+*.ipr
+out/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Android
+*.apk
+*.ap_
+*.aab
+*.so
+*.dex
+*.class
+*.jar
+*.war
+*.ear
+
+# Generated files
+generated/
+captures/
+*.hprof
+
+# Signing
+*.keystore
+*.jks
+signing.properties
+
+# Test reports
+*/build/reports/
+*/build/outputs/
+
+# Cache
+*.log
+*.tmp
+
+# Kotlin
+*.klob
+
+# Compose
+*.composition
+
+# Navigation
+.navigation/
+
+# Room
+*.db
+*.db-journal
+
+# Protobuf
+*.proto
+
+# Firebase
+google-services.json
+
+# Crashlytics
+crashlytics.properties
+fabric.properties
+
+# Profiling
+*.trace
+*.perf
+
+# Coverage
+*.ec
+coverage/
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Other
+*.orig
+*.bak
+*.old

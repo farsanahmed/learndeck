@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">LearnDeck</string>
+    <string name="track_linux">Linux</string>
+    <string name="track_coding">Coding (Python)</string>
+    <string name="track_agents">AI Agents</string>
+    <string name="track_linux_summary">Command line, file system, permissions, and scripting</string>
+    <string name="track_coding_summary">Python basics, variables, loops, functions, and data structures</string>
+    <string name="track_agents_summary">How AI agents work, prompts, tools, and orchestration</string>
+    <string name="lessons_title">Lessons</string>
+    <string name="copy_code">Copy</string>
+    <string name="copied">Copied!</string>
+    <string name="no_lessons">No lessons available yet</string>
+    <string name="loading">Loading…</string>
+    <string name="error_loading">Error loading lesson</string>
+</resources>
