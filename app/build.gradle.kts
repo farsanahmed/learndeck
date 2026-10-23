@@ -63,6 +63,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
 
+    // Material Components (needed for Material3 theme)
+    implementation("com.google.android.material:material:1.11.0")
+
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.8.0")
 
