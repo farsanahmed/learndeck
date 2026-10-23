@@ -3,22 +3,13 @@ package com.learndeck.data
 import android.content.Context
 import android.content.res.AssetManager
 import com.learndeck.model.Lesson
-import com.learndeck.model.LessonFrontMatter
 import com.learndeck.model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.yaml.Yaml
-import kotlinx.serialization.yaml.yaml
 import java.io.InputStreamReader
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class LessonRepository(private val context: Context) {
-
-    private val yaml = Yaml {
-        explicitNulls = false
-    }
 
     suspend fun getTracks(): List<Track> = withContext(Dispatchers.IO) {
         Track.values().toList()
@@ -31,8 +22,7 @@ class LessonRepository(private val context: Context) {
             val files = assetManager.list(trackDir) ?: emptyArray()
             files
                 .filter { it.endsWith(".md") }
-                .map { parseLesson(assetManager, trackDir, it) }
-                .filterNotNull()
+                .mapNotNull { parseLesson(assetManager, trackDir, it) }
                 .sortedBy { it.order }
         } catch (e: Exception) {
             emptyList()
@@ -45,8 +35,7 @@ class LessonRepository(private val context: Context) {
             assetManager.open(path).use { inputStream ->
                 val reader = InputStreamReader(inputStream)
                 val content = reader.readText()
-                val (frontMatter, body) = parseFrontMatter(content)
-                val meta = yaml.decodeFromString<LessonFrontMatter>(frontMatter)
+                val meta = parseFrontMatter(content)
                 val id = fileName.substringBefore(".").substringAfter("-")
                 Lesson(
                     id = id,
@@ -54,7 +43,7 @@ class LessonRepository(private val context: Context) {
                     track = meta.track,
                     order = meta.order,
                     summary = meta.summary,
-                    body = body.trim()
+                    body = meta.body.trim()
                 )
             }
         } catch (e: Exception) {
@@ -62,14 +51,39 @@ class LessonRepository(private val context: Context) {
         }
     }
 
-    private fun parseFrontMatter(content: String): Pair<String, String> {
-        val pattern = Pattern.compile("^---\\s*\\n(.*?)\\n---\\s*\\n(.*)", Pattern.DOTALL)
+    private fun parseFrontMatter(content: String): ParsedMeta {
+        val pattern = Pattern.compile(
+            "^---\\s*\\n(.*?)\\n---\\s*\\n(.*)",
+            Pattern.DOTALL
+        )
         val matcher = pattern.matcher(content)
-        if (matcher.find()) {
-            return matcher.group(1) to matcher.group(2)
+        if (!matcher.find()) {
+            return ParsedMeta("", "", 0, "", content)
         }
-        return "" to content
+        val frontMatter = matcher.group(1)
+        val body = matcher.group(2)
+        return ParsedMeta(
+            title = frontMatter.line("title"),
+            track = frontMatter.line("track"),
+            order = frontMatter.line("order")?.toIntOrNull() ?: 0,
+            summary = frontMatter.line("summary") ?: "",
+            body = body
+        )
     }
+
+    private fun String.line(key: String): String? {
+        val pattern = Pattern.compile("^\\s*$key:\\s*(.+)$", Pattern.MULTILINE)
+        val matcher = pattern.matcher(this)
+        return if (matcher.find()) matcher.group(1).trim() else null
+    }
+
+    private data class ParsedMeta(
+        val title: String,
+        val track: String,
+        val order: Int,
+        val summary: String,
+        val body: String
+    )
 
     suspend fun getLesson(track: Track, lessonId: String): Lesson? = withContext(Dispatchers.IO) {
         getLessonsForTrack(track).find { it.id == lessonId }

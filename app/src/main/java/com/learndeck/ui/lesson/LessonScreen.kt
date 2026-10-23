@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,14 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.learndeck.model.Lesson
 import com.learndeck.ui.theme.LearnDeckTypography
-import io.noties.markwon.Markwon
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
-import io.noties.markwon.ext.tasklist.TaskListPlugin
-import io.noties.markwon.ext.tables.TablePlugin
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun LessonScreen(
@@ -58,13 +52,6 @@ fun LessonScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
-    val markwon = remember {
-        Markwon.builder(context)
-            .usePlugin(StrikethroughPlugin.create())
-            .usePlugin(TaskListPlugin.create())
-            .usePlugin(TablePlugin.create())
-            .build()
-    }
     val scrollState = rememberScrollState()
     var copied by remember { mutableStateOf(false) }
 

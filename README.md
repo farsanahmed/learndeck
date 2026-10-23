@@ -128,7 +128,7 @@ echo "Code blocks get syntax highlighting and a copy button"
 - **UI**: Jetpack Compose (Material 3)
 - **Architecture**: MVVM with ViewModel + Repository
 - **Navigation**: Navigation Compose
-- **Markdown**: Markwon (offline, no WebView)
+- **Markdown**: Custom parser (offline, no WebView)
 - **Serialization**: Kotlinx Serialization (YAML for front matter)
 - **Min SDK**: 28 (Android 9+)
 - **Target SDK**: 34

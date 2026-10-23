@@ -1,8 +1,5 @@
 package com.learndeck.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Lesson(
     val id: String,
     val title: String,
@@ -10,14 +7,6 @@ data class Lesson(
     val order: Int,
     val summary: String,
     val body: String
-)
-
-@Serializable
-data class LessonFrontMatter(
-    val title: String,
-    val track: String,
-    val order: Int,
-    val summary: String
 )
 
 enum class Track(val id: String, val displayName: String, val summary: String) {

@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
     id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
 }
 
@@ -67,16 +66,8 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.8.0")
 
-    // Markdown rendering
-    implementation("io.noties.markwon:core:4.6.4")
-    implementation("io.noties.markwon:ext-strikethrough:4.6.4")
-    implementation("io.noties.markwon:ext-tasklist:4.6.4")
-    implementation("io.noties.markwon:ext-tables:4.6.4")
-    implementation("io.noties.markwon:ext-github:4.6.4")
-
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-yaml:1.6.3")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
