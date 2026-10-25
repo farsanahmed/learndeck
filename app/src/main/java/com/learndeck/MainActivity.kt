@@ -30,18 +30,17 @@ import com.learndeck.ui.track.TrackScreen
 class MainActivity : ComponentActivity() {
 
     private val repository: LessonRepository by lazy { LessonRepository(this) }
-    private val viewModel: MainViewModel by lazy {
-        val factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return MainViewModel(repository) as T
-            }
-        }
-        ViewModelProvider(this, factory).get(MainViewModel::class.java)
-    }
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                return MainViewModel(repository) as T
+            }
+        }
+        viewModel = androidx.lifecycle.ViewModelProvider(this, factory).get(MainViewModel::class.java)
         setContent {
             LearnDeckTheme(darkTheme = androidx.compose.foundation.isSystemInDarkTheme()) {
                 Surface(
