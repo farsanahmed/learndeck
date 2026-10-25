@@ -46,6 +46,7 @@ import com.learndeck.model.Lesson
 import com.learndeck.ui.theme.LearnDeckTypography
 import kotlinx.coroutines.delay
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun LessonScreen(
     modifier: Modifier = Modifier,
@@ -55,6 +56,13 @@ fun LessonScreen(
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     var copied by remember { mutableStateOf(false) }
+
+    LaunchedEffect(copied) {
+        if (copied) {
+            delay(1500)
+            copied = false
+        }
+    }
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -84,12 +92,6 @@ fun LessonScreen(
                 onCodeBlockClick = { code ->
                     copyToClipboard(context, code)
                     copied = true
-                    LaunchedEffect(copied) {
-                        if (copied) {
-                            delay(1500)
-                            copied = false
-                        }
-                    }
                 }
             )
         }
@@ -153,7 +155,7 @@ private fun CodeBlockView(
     language: String?,
     onCopyClick: () -> Unit
 ) {
-    val isDark = androidx.compose.material3.MaterialTheme.colorScheme.isDark
+    val isDark = androidx.compose.material3.MaterialTheme.colorScheme.background == Color(0xFF1C1B1F)
     val backgroundColor = if (isDark) Color(0xFF1E1E1E) else Color(0xFFF5F5F5)
     val textColor = if (isDark) Color(0xFFD4D4D4) else Color(0xFF1A1A1A)
 

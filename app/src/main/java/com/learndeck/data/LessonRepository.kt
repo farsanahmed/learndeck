@@ -63,8 +63,8 @@ class LessonRepository(private val context: Context) {
         val frontMatter = matcher.group(1)
         val body = matcher.group(2)
         return ParsedMeta(
-            title = frontMatter.line("title"),
-            track = frontMatter.line("track"),
+            title = frontMatter.line("title") ?: "",
+            track = frontMatter.line("track") ?: "",
             order = frontMatter.line("order")?.toIntOrNull() ?: 0,
             summary = frontMatter.line("summary") ?: "",
             body = body

@@ -1,6 +1,7 @@
 package com.learndeck
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.learndeck.data.LessonRepository
 import com.learndeck.model.Lesson

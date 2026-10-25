@@ -4,16 +4,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavType
 import com.learndeck.data.LessonRepository
+import com.learndeck.model.Lesson
 import com.learndeck.model.Track
 import com.learndeck.ui.home.HomeScreen
 import com.learndeck.ui.lesson.LessonScreen
@@ -28,10 +35,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LearnDeckTheme {
+            LearnDeckTheme(darkTheme = androidx.compose.foundation.isSystemInDarkTheme()) {
                 Surface(
-                    modifier = androidx.compose.ui.Modifier.fillMaxSize(),
-                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
                     NavHost(navController, "home") {
@@ -43,12 +50,10 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "track/{trackId}",
                             arguments = listOf(
-                                androidx.navigation.navArgument("trackId") {
-                                    type = androidx.navigation.NavType.StringType
-                                }
+                                navArgument("trackId") { type = NavType.StringType }
                             )
                         ) { backStackEntry ->
-                            val trackId = backStackEntry.getString() ?: Track.LINUX.id
+                            val trackId = backStackEntry.arguments?.getString("trackId") ?: Track.LINUX.id
                             val track = Track.values().find { it.id == trackId } ?: Track.LINUX
 
                             LaunchedEffect(track) {
@@ -67,16 +72,12 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "lesson/{trackId}/{lessonId}",
                             arguments = listOf(
-                                androidx.navigation.navArgument("trackId") {
-                                    type = androidx.navigation.NavType.StringType
-                                },
-                                androidx.navigation.navArgument("lessonId") {
-                                    type = androidx.navigation.NavType.StringType
-                                }
+                                navArgument("trackId") { type = NavType.StringType },
+                                navArgument("lessonId") { type = NavType.StringType }
                             )
                         ) { backStackEntry ->
-                            val trackId = backStackEntry.getString() ?: Track.LINUX.id
-                            val lessonId = backStackEntry.getString() ?: ""
+                            val trackId = backStackEntry.arguments?.getString("trackId") ?: Track.LINUX.id
+                            val lessonId = backStackEntry.arguments?.getString("lessonId") ?: ""
                             val track = Track.values().find { it.id == trackId } ?: Track.LINUX
 
                             var lesson by remember { mutableStateOf<Lesson?>(null) }
