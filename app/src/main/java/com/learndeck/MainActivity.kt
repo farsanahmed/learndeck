@@ -16,11 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.NavType
 import com.learndeck.data.LessonRepository
 import com.learndeck.model.Lesson
 import com.learndeck.model.Track
@@ -33,7 +31,13 @@ class MainActivity : ComponentActivity() {
 
     private val repository: LessonRepository by lazy { LessonRepository(this) }
     private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this, MainViewModel.Factory(repository)).get(MainViewModel::class.java)
+        val factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return MainViewModel(repository) as T
+            }
+        }
+        ViewModelProvider(this, factory).get(MainViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
