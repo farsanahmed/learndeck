@@ -71,7 +71,7 @@ private fun TrackCard(
                     fontWeight = FontWeight.Bold,
                     style = LearnDeckTypography.headlineMedium
                 )
-                androidx.compose.foundation.layout.Spacer(modifier = Modifier.size(height = 8.dp))
+                androidx.compose.foundation.layout.Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = track.summary,
                     fontSize = 14.sp,
