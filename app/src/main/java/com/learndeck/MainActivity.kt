@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +32,9 @@ import com.learndeck.ui.track.TrackScreen
 class MainActivity : ComponentActivity() {
 
     private val repository: LessonRepository by lazy { LessonRepository(this) }
-    private val viewModel: MainViewModel by viewModels { MainViewModel.Factory(repository) }
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this, MainViewModel.Factory(repository)).get(MainViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
